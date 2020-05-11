@@ -5,7 +5,14 @@ Project Layout
 Radar System Requirements  
 <img src="images/Radar_System_Requirements.png" width="829" height="226" />
 
-## (TODO)Overview  
+## Overview  
+In this project, you will implemented a CFAR processing script to measure the distance and velocity of the target and display the target in a simulated environment. You will be using the MATLAB to performat the sensor target simulation. Then you will evaluate the performance of CFAR processing by displaying the output figures.  This project consists of four parts:  
+
+* First, you will configure the FMCW waveform based on the system requirements.
+* Then, you will define the range and velocity of target and simulate its displacement. In the same simulation loop, you will proces sthe transmit and receive signal to determine the beat signal
+* Next, you will perform range of FFT on the received signal to determine the range.
+* Finally, we will performa the CFAR processing on the output of second FFT to display the target
+
 ## Prerequisites/Dependencies  
 Matlab Download
 To complete the project, you will need to download MATLAB on your computer, if you haven't already. To get started, you can follow these steps:
