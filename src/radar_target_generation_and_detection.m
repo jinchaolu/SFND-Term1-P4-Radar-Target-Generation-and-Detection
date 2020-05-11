@@ -157,18 +157,27 @@ figure,surf(doppler_axis,range_axis,RDM);
 
 % *%TODO* :
 %Select the number of Training Cells in both the dimensions.
+Tr = 8;    % Training cells on range dimension
+Td = 4;    % Training cells on doppler dimension
 
 % *%TODO* :
 %Select the number of Guard Cells in both dimensions around the Cell under 
 %test (CUT) for accurate estimation
+Gr = 8;    % Guard cells on range dimension
+Gd = 4;    % Guard cells on doppler dimension
 
 % *%TODO* :
 % offset the threshold by SNR value in dB
+offset = 20;
 
 % *%TODO* :
 %Create a vector to store noise_level for each iteration on training cells
 noise_level = zeros(1,1);
 
+% Calculate the size of different cell types
+n_guard_size = (2 * Tr + 2 * Gr + 1) * (2 * Td + 2 * Gd + 1);
+n_guard_and_CUT_size = (2 * Gr + 1) * (2 * Gd + 1);
+n_training_size = n_guard_size - n_guard_and_CUT_size;
 
 % *%TODO* :
 %design a loop such that it slides the CUT across range doppler map by
@@ -181,13 +190,39 @@ noise_level = zeros(1,1);
 %signal under CUT with this threshold. If the CUT level > threshold assign
 %it a value of 1, else equate it to 0.
 
+signal_cfar = zeros(size(RDM));
 
    % Use RDM[x,y] as the matrix from the output of 2D FFT for implementing
    % CFAR
-
-
-
-
+for i = (Tr + Gr) + 1 : Nr / 2 - (Tr + Gr)
+    for j = (Td + Gd) + 1 : Nd - (Td + Gd)
+        % Step 1: Take the current training grid
+        training_grid = RDM(i - (Tr + Gr) : i + (Tr + Gr), ...
+                            j - (Td + Gd) : j + (Td + Gd));
+        
+        % Step 2: Set 0 to not-training cells
+        training_grid(i - Gr : i + Gr, ...
+                      j - Gd : j + Gd) = 0;
+        
+        % Step 3: Convert decibel to power
+        pow = db2pow(training_grid);
+        
+        % Step 4: Calculate the average power
+        avg_pow = sum(pow) / n_training_size;
+        
+        % Step 5: Convert power to decibel
+        db = pow2db(avg_pow);
+        
+        % Step 6: Filter the signal above the threshold
+        threshold = db + offset;
+        
+        if RDM(i, j) > threshold
+            signal_cfar(i, j) = 1;
+        end
+        
+        % Done
+    end
+end
 
 % *%TODO* :
 % The process above will generate a thresholded block, which is smaller 
@@ -206,7 +241,7 @@ noise_level = zeros(1,1);
 % *%TODO* :
 %display the CFAR output using the Surf function like we did for Range
 %Doppler Response output.
-figure,surf(doppler_axis,range_axis,'replace this with output');
+figure,surf(doppler_axis, range_axis, signal_cfar);
 colorbar;
 
 
