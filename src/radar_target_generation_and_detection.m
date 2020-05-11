@@ -20,8 +20,8 @@ c = 3e8;
 % *%TODO* :
 % define the target's initial position and velocity. Note : Velocity
 % remains contant
-init_pos = 30;
-init_vel = 30;
+d_0 = 30;
+v_0 = 30;
 
 
 %% FMCW Waveform Generation
@@ -32,7 +32,7 @@ init_vel = 30;
 % chirp using the requirements above.
 B_sweep = c / (2 * range_resolution);   % bandwidth
 T_chirp = 5.5 * 2 * range_max / c;      % chirp time
-Slope = B_sweep / T_chirp;                  % slope
+alpha = B_sweep / T_chirp;                  % slope
 
 %Operating carrier frequency of Radar 
 fc= 77e9;             %carrier freq
@@ -47,7 +47,7 @@ Nr=1024;                  %for length of time OR # of range cells
 
 % Timestamp for running the displacement scenario for every sample on each
 % chirp
-t=linspace(0,Nd*Tchirp,Nr*Nd); %total time for samples
+t=linspace(0, Nd * T_chirp, Nr * Nd); %total time for samples
 
 
 %Creating the vectors for Tx, Rx and Mix based on the total samples input.
@@ -68,18 +68,22 @@ for i=1:length(t)
     
     % *%TODO* :
     %For each time stamp update the Range of the Target for constant velocity. 
+    r_t(i) = d_0 + v_0 * t(i);
+    
+    % Calculate the delay time
+    td(i) = 2 * r_t(i) / c;
     
     % *%TODO* :
     %For each time sample we need update the transmitted and
     %received signal. 
-    Tx(i) = 
-    Rx (i)  =
+    Tx(i) = cos(2 * pi() * (fc * t(i) + alpha * t(i) ^ 2 / 2));
+    Rx(i) = cos(2 * pi() * (fc * (t(i) - td(i)) + alpha * (t(i) - td(i)) ^ 2 / 2));
     
     % *%TODO* :
     %Now by mixing the Transmit and Receive generate the beat signal
     %This is done by element wise matrix multiplication of Transmit and
     %Receiver Signal
-    Mix(i) = 
+    Mix(i) = Tx(i) .* Rx(i);
     
 end
 
@@ -89,18 +93,21 @@ end
  % *%TODO* :
 %reshape the vector into Nr*Nd array. Nr and Nd here would also define the size of
 %Range and Doppler FFT respectively.
+Mix = reshape(Mix, [Nr, Nd]);
 
  % *%TODO* :
 %run the FFT on the beat signal along the range bins dimension (Nr) and
 %normalize.
+Mix_fft = fft(Mix);
 
  % *%TODO* :
 % Take the absolute value of FFT output
+Mix_fft_abs = abs(Mix_fft / Nr);
 
  % *%TODO* :
 % Output of FFT is double sided signal, but we are interested in only one side of the spectrum.
 % Hence we throw out half of the samples.
-
+signal_fft = Mix_fft_abs(1 : Nr / 2 + 1);
 
 %plotting the range
 figure ('Name','Range from First FFT')
@@ -108,7 +115,8 @@ subplot(2,1,1)
 
  % *%TODO* :
  % plot FFT output 
-
+f = Nr * (0:(Nr / 2)) / Nr;
+plot(f, signal_fft)
  
 axis ([0 200 0 1]);
 
