@@ -21,19 +21,23 @@ To complete the project, you will need to download MATLAB on your computer, if y
 2. Download the installer here.
 3. Run the installer – it will guide you through the steps for your OS.
 
-## (TODO)Project Description  
-.
-├── images
-│   ├── Project_Layout.png
-│   └── Radar_System_Requirements.png
-├── LICENSE
-├── README.md
-├── results
-│   ├── 1st_FFT_Result.jpg
-│   ├── 2D_CFAR_Range_Doppler_Map_Result.jpg
-│   └── 2D_FFT_Range_Doppler_Result.jpg
+## Project Description  
+```
+.SFND-Term1-P4-Radar-Target-Generation-and-Detection       # Radar Target Generation and Detection Project
+├── images                                                 # Image files
+│   ├── Project_Layout.png                                 # Project layout
+│   └── Radar_System_Requirements.png                      # Radar system requirements
+├── LICENSE                                                # License
+├── README.md                                              # Readme file
+├── results                                                # Result data for analysis
+│   ├── 1st_FFT_Result.jpg                                 # Fist order fast fourier transform
+│   ├── 2D_CFAR_Range_Doppler_Map_Result.jpg               # 2D fast fourier transform with CFAR
+│   └── 2D_FFT_Range_Doppler_Result.jpg                    # 2D fast fourier transform
 └── src
-    └── radar_target_generation_and_detection.m
+    └── radar_target_generation_and_detection.m            # Main function to simulate environment, process data and display output
+```
+
+- [radar_target_generation_and_detection.m](/src/radar_target_generation_and_detection.m): MATLAB script, main function to simulate environment, process data and display output  
 
 ## Run the project  
 * Clone this repository  
@@ -68,9 +72,15 @@ The Range FFT on the Beat or Mixed Signal is implemented here [radar_target_gene
 
 The result plot is implemented here [radar_target_generation_and_detection.m (Line 112-121)](./src/radar_target_generation_and_detection.m#L112-L121).  
 
+![1st_FFT_Result.jpg](./results/1st_FFT_Result.jpg "1st_FFT_Result.jpg")  
+
 ### 4. 2D CFAR  
 #### 4.1 Implement the 2D CFAR process on the output of 2D FFT operation, i.e the Range Doppler Map.  
 The 2D CFAR process on the output of 2D FFT operation is implemented here [radar_target_generation_and_detection.m (Line 131-245)](./src/radar_target_generation_and_detection.m#L131-L245).  
+
+![2D_FFT_Range_Doppler_Result.jpg](./results/2D_FFT_Range_Doppler_Result.jpg "2D_FFT_Range_Doppler_Result.jpg")  
+
+![2D_CFAR_Range_Doppler_Map_Result.jpg](./results/2D_CFAR_Range_Doppler_Map_Result.jpg "2D_CFAR_Range_Doppler_Map_Result.jpg")  
 
 #### 4.2 Create a CFAR README File  
 Done. You are reading it.  
