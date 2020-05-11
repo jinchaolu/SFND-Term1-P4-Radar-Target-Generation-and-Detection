@@ -22,6 +22,19 @@ To complete the project, you will need to download MATLAB on your computer, if y
 3. Run the installer – it will guide you through the steps for your OS.
 
 ## (TODO)Project Description  
+.
+├── images
+│   ├── Project_Layout.png
+│   └── Radar_System_Requirements.png
+├── LICENSE
+├── README.md
+├── results
+│   ├── 1st_FFT_Result.jpg
+│   ├── 2D_CFAR_Range_Doppler_Map_Result.jpg
+│   └── 2D_FFT_Range_Doppler_Result.jpg
+└── src
+    └── radar_target_generation_and_detection.m
+
 ## Run the project  
 * Clone this repository  
 ```
